@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>دالة</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background: linear-gradient(-45deg,#00d4ff,#ff4aa3,#00ffa6,#ffcc00);
+background-size:400% 400%;
+animation: gradient 10s ease infinite;
+}
+
+@keyframes gradient{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.dark{background:#111;color:white;animation:none;}
+
+.page{
+background:white;
+padding:20px;
+border-radius:16px;
+width:95%;
+height:90%;
+display:none;
+flex-direction:column;
+overflow:auto;
+}
+
+.dark .page{background:#222;color:white;}
+.page.active{display:flex;}
+
+button{
+padding:12px;
+margin:5px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+background:#00bcd4;
+color:white;
+font-weight:bold;
+}
+
+input{
+padding:10px;
+margin:5px;
+border-radius:10px;
+}
+
+table{border-collapse:collapse;margin-top:10px;}
+th,td{border:1px solid #ccc;width:120px;height:35px;text-align:center;}
+</style>
+</head>
+
+<body>
+
+<!-- صفحة الدخول -->
+<div class="page active" id="loginPage">
+
+<h2>دالة 🔐</h2>
+
+<input id="email" placeholder="اكتب ايميلك">
+<button onclick="login()">دخول</button>
+<button onclick="skipLogin()">تخطي</button>
+<button onclick="createNewTable()">➕ إنشاء جدول</button>
+
+</div>
+
+<!-- صفحة الجدول -->
+<div class="page" id="tablePage">
+
+<h2 id="welcome"></h2>
+
+<button onclick="toggleDark()">🌙 وضع داكن</button>
+<button onclick="clearTable()">🗑️ مسح الجدول</button>
+
+<table id="table"></table>
+
+</div>
+
+<script>
+let currentUser="guest";
+let days=["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة"];
+
+function login(){
+currentUser=email.value || "guest";
+showTable();
+}
+
+function skipLogin(){
+showTable();
+}
+
+function createNewTable(){
+currentUser="guest";
+loginPage.classList.remove("active");
+tablePage.classList.add("active");
+welcome.innerText="جدول جديد ✨";
+createTable();
+}
+
+function showTable(){
+loginPage.classList.remove("active");
+tablePage.classList.add("active");
+welcome.innerText="مرحبًا "+currentUser;
+createTable();
+loadTable();
+}
+
+function createTable(){
+table.innerHTML="";
+
+let tr=document.createElement("tr");
+tr.appendChild(document.createElement("th"));
+
+for(let d of days){
+let th=document.createElement("th");
+th.innerText=d;
+tr.appendChild(th);
+}
+table.appendChild(tr);
+
+for(let i=6;i<17;i++){
+let row=document.createElement("tr");
+let th=document.createElement("th");
+th.innerText=i+":00";
+row.appendChild(th);
+
+for(let j=0;j<7;j++){
+let td=document.createElement("td");
+td.contentEditable=true;
+td.oninput=saveTable;
+row.appendChild(td);
+}
+table.appendChild(row);
+}
+}
+
+function toggleDark(){
+document.body.classList.toggle("dark");
+}
+
+function saveTable(){
+localStorage.setItem("schedule_"+currentUser, table.innerHTML);
+}
+
+function loadTable(){
+let data=localStorage.getItem("schedule_"+currentUser);
+if(data) table.innerHTML=data;
+}
+
+function clearTable(){
+localStorage.removeItem("schedule_"+currentUser);
+createTable();
+}
+</script>
+
+</body>
+</html>
