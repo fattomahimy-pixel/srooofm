@@ -1,0 +1,192 @@
+/* =================== عام =================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 500;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-gradient, linear-gradient(-45deg, #00d4ff, #ff4aa3, #00ffa6, #ffcc00));
+  background-size: 400% 400%;
+  animation: gradient var(--animation-speed, 12s) ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.dark {
+  background: #0f0f0f;
+  color: #f0f0f0;
+  animation: none;
+}
+
+/* =================== الصفحات =================== */
+.page {
+  background: white;
+  padding: 30px;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 1100px;
+  height: 85vh;
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s ease-out;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.dark .page {
+  background: #1a1a1a;
+  color: #e0e0e0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.page.active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =================== العناوين والنصوص =================== */
+h2, h3 {
+  margin: 12px 0;
+  color: #222;
+}
+.dark h2, .dark h3 { color: #eee; }
+
+/* =================== الأزرار =================== */
+button {
+  padding: 12px 28px;
+  margin: 10px 8px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  background: #00bcd4;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,188,212,0.4);
+}
+
+.settings-btn { background: #9c27b0; }
+.settings-btn:hover { background: #7b1fa2; box-shadow: 0 8px 20px rgba(156,39,176,0.4); }
+
+.dark-btn { background: #673ab7; }
+.dark-btn:hover { background: #512da8; }
+
+/* =================== المدخلات =================== */
+input, select {
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  font-size: 1.1rem;
+  font-family: 'Tajawal', sans-serif;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* =================== الجداول المحفوظة =================== */
+.saved-tables-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+/* =================== تخصيص الجدول =================== */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+}
+
+/* =================== الجدول =================== */
+table {
+  border-collapse: collapse;
+  margin-top: 20px;
+  width: 100%;
+  font-size: 1.05rem;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  min-width: 100px;
+}
+.time-header {
+  background: #444;
+  color: white;
+  font-weight: bold;
+}
+.day-header {
+  background: #00bcd4;
+  color: white;
+  font-weight: bold;
+}
+
+/* =================== الإعدادات =================== */
+.settings-section {
+  margin: 30px 0;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 16px;
+}
+.dark .settings-section { background: #222; }
+
+/* =================== النجوم =================== */
+.rating-container {
+  margin: 20px 0;
+  text-align: center;
+}
+.star {
+  font-size: 2.8rem;
+  cursor: pointer;
+  color: #000;
+  transition: color 0.2s;
+  margin: 0 6px;
+}
+.star.active {
+  color: #ffd700;
+}
+
+/* =================== أزرار سفلية =================== */
+.main-actions, .action-buttons {
+  margin-top: auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+}

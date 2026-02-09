@@ -1,418 +1,110 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>دالة 📚</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-
-<style>
-  body {
-    margin: 0;
-    font-family: 'Tajawal', sans-serif;
-    font-weight: 500;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: var(--bg-gradient, linear-gradient(-45deg, #00d4ff, #ff4aa3, #00ffa6, #ffcc00));
-    background-size: 400% 400%;
-    animation: gradient var(--animation-speed, 12s) ease infinite;
-  }
-  @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .dark { background: #0f0f0f; color: #f0f0f0; animation: none; }
-
-  .page {
-    background: white;
-    padding: 30px;
-    border-radius: 24px;
-    width: 90%;
-    max-width: 1100px;
-    height: 85vh;
-    display: none;
-    flex-direction: column;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.5s ease-out;
-    overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  }
-  .dark .page { background: #1a1a1a; color: #e0e0e0; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-  .page.active {
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  h2, h3 { margin: 12px 0; color: #222; }
-  .dark h2, .dark h3 { color: #eee; }
-
-  button {
-    padding: 12px 28px;
-    margin: 10px 8px;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-    background: #00bcd4;
-    color: white;
-    font-weight: 600;
-    font-size: 1.1rem;
-    transition: all 0.3s;
-  }
-  button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,188,212,0.4); }
-
-  .settings-btn { background: #9c27b0; }
-  .settings-btn:hover { background: #7b1fa2; }
-
-  .dark-btn { background: #673ab7; }
-  .dark-btn:hover { background: #512da8; }
-
-  input, select {
-    padding: 14px;
-    margin: 10px 0;
-    border-radius: 14px;
-    border: 1px solid #ddd;
-    font-size: 1.1rem;
-    font-family: 'Tajawal', sans-serif;
-  }
-
-  .options-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    margin: 20px 0;
-  }
-
-  .checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.15rem;
-  }
-
-  /* ★★★ نظام النجوم ★★★ */
-  .rating-container {
-    margin: 20px 0;
-    text-align: center;
-  }
-  .star {
-    font-size: 2.5rem;
-    cursor: pointer;
-    color: #000;
-    transition: color 0.2s;
-    margin: 0 4px;
-  }
-  .star.active {
-    color: #ffd700; /* ذهبي */
-  }
-
-  table {
-    border-collapse: collapse;
-    margin-top: 20px;
-    width: 100%;
-    font-size: 1.05rem;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-    min-width: 100px;
-  }
-  .time-header {
-    background: #444;
-    color: white;
-    font-weight: bold;
-  }
-  .day-header {
-    background: #00bcd4;
-    color: white;
-    font-weight: bold;
-  }
-  .settings-section {
-    margin: 30px 0;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 16px;
-  }
-  .dark .settings-section { background: #222; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>دالة 📚✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- الصفحة الرئيسية -->
-<div class="page active" id="homePage">
-  <h2>دالة 📚✨</h2>
-  <p>نظم دراستك بكل سهولة ومتعة 😊</p>
+  <!-- صفحة تسجيل الدخول / إنشاء حساب -->
+  <div class="page active" id="authPage">
+    <h2>دالة 📚🔥</h2>
+    <h3>سجل دخولك أو أنشئ حساب جديد 😈</h3>
 
-  <h3>جداولي المحفوظة 📋</h3>
-  <div id="savedTablesList" style="margin: 24px 0; display: flex; flex-wrap: wrap; gap: 12px;"></div>
-
-  <div style="margin-top: auto; text-align: center;">
-    <button onclick="showCustomizePage()">➕ إنشاء جدول جديد</button>
-    <button class="settings-btn" onclick="openSettings()">⚙️ الإعدادات</button>
-  </div>
-</div>
-
-<!-- صفحة تخصيص جدول جديد -->
-<div class="page" id="customizePage">
-  <h2>تخصيص جدولك الجديد 🌟</h2>
-
-  <label>اسم الجدول:</label>
-  <input id="newTableName" placeholder="مثال: الترم الأول ١٤٤٧" style="width: 320px;">
-
-  <h3>الأيام اللي فيها دوام 🗓️</h3>
-  <div class="options-grid" id="daysCheckboxes"></div>
-
-  <h3>عدد الحصص اليومية ⏰</h3>
-  <select id="lessonsCount">
-    <option value="5">5 حصص</option>
-    <option value="6" selected>6 حصص</option>
-    <option value="7">7 حصص</option>
-    <option value="8">8 حصص</option>
-    <option value="9">9 حصص</option>
-  </select>
-
-  <div style="margin-top: 40px; text-align: center;">
-    <button onclick="backToHome()">رجوع</button>
-    <button onclick="createCustomizedTable()">إنشاء الجدول → 🚀</button>
-  </div>
-</div>
-
-<!-- صفحة الجدول (الأيام فوق، الحصص على اليسار) -->
-<div class="page" id="tablePage">
-  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-    <h2 id="welcome">جدولك الدراسي 📅</h2>
-    <button onclick="backToHome()">← رجوع</button>
-  </div>
-
-  <input id="tableName" placeholder="اسم الجدول" style="width: 320px;">
-  <button onclick="saveCurrentTable()">💾 حفظ الجدول</button>
-
-  <button onclick="clearTable()">🗑️ مسح الجدول</button>
-
-  <table id="table"></table>
-</div>
-
-<!-- صفحة الإعدادات -->
-<div class="page" id="settingsPage">
-  <h2>الإعدادات ⚙️🔥</h2>
-
-  <div class="settings-section">
-    <h3>الوضع الليلي 🌙</h3>
-    <button class="dark-btn" onclick="toggleDark()">تفعيل/إيقاف الوضع الداكن</button>
-  </div>
-
-  <div class="settings-section">
-    <h3>تخصيص خلفية التطبيق 🎨</h3>
-    <label>لون الخلفية الأساسي:</label>
-    <input type="color" id="bgColor1" value="#00d4ff">
-    <br><br>
-    <label>لون الخلفية الثاني:</label>
-    <input type="color" id="bgColor2" value="#ff4aa3">
-    <br><br>
-    <label>سرعة التدرج (ثواني):</label>
-    <input type="number" id="animSpeed" value="12" min="4" max="30" step="1">
-    <button onclick="applyBackground()">تطبيق التغييرات 🌈</button>
-  </div>
-
-  <div class="settings-section">
-    <h3>كيف ترى تطبيقنا؟ ⭐</h3>
-    <p>قيّمنا من 1 إلى 5 نجوم</p>
-    <div class="rating-container" id="ratingStars"></div>
-  </div>
-
-  <div style="margin-top: 50px; text-align: center;">
-    <button onclick="backToHome()">رجوع للرئيسية 🏠</button>
-  </div>
-</div>
-
-<script>
-// متغيرات
-let currentUser = "guest";
-let days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-let tables = [];
-let currentRating = localStorage.getItem("dalla_rating") || 0;
-
-// ----------------- دوال أساسية -----------------
-function loadSavedTables() {
-  const saved = localStorage.getItem("dalla_tables_" + currentUser);
-  if (saved) tables = JSON.parse(saved);
-  updateSavedTablesList();
-}
-
-function saveAllTables() {
-  localStorage.setItem("dalla_tables_" + currentUser, JSON.stringify(tables));
-}
-
-function updateSavedTablesList() {
-  const container = document.getElementById("savedTablesList");
-  container.innerHTML = tables.length === 0 
-    ? "<p>ما عندك جداول محفوظة بعد 😔</p>"
-    : "";
-
-  tables.forEach((tbl, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = tbl.name || `جدول ${i + 1}`;
-    btn.onclick = () => loadTable(tbl);
-    btn.oncontextmenu = (e) => {
-      e.preventDefault();
-      if (confirm(`متأكد تبي تحذف "${tbl.name || 'هذا الجدول'}"؟ 🗑️`)) {
-        deleteTable(i);
-      }
-    };
-    container.appendChild(btn);
-  });
-}
-
-function deleteTable(index) {
-  tables.splice(index, 1);
-  saveAllTables();
-  updateSavedTablesList();
-}
-
-function loadTable(tbl) {
-  document.getElementById("table").innerHTML = tbl.content;
-  document.getElementById("welcome").textContent = tbl.name || "جدولك الدراسي";
-  document.getElementById("tableName").value = tbl.name || "";
-  switchPage("tablePage");
-}
-
-function showHome() {
-  loadSavedTables();
-  switchPage("homePage");
-}
-
-function showCustomizePage() {
-  const container = document.getElementById("daysCheckboxes");
-  container.innerHTML = "";
-  days.forEach(day => {
-    const label = document.createElement("label");
-    label.className = "checkbox-label";
-    label.innerHTML = `<input type="checkbox" name="day" value="${day}" checked> ${day}`;
-    container.appendChild(label);
-  });
-  switchPage("customizePage");
-}
-
-function openSettings() {
-  switchPage("settingsPage");
-  renderStars();  // نعرض النجوم مع التقييم الحالي
-}
-
-function switchPage(pageId) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(pageId).classList.add("active");
-}
-
-function backToHome() {
-  switchPage("homePage");
-}
-
-// ----------------- إنشاء الجدول (الأيام فوق، الحصص على اليسار) -----------------
-function createCustomizedTable() {
-  const name = document.getElementById("newTableName").value.trim() || "جدول جديد";
-  const selectedDays = Array.from(document.querySelectorAll('input[name="day"]:checked'))
-    .map(cb => cb.value);
-  const lessonsCount = parseInt(document.getElementById("lessonsCount").value);
-
-  const table = document.getElementById("table");
-  table.innerHTML = "";
-
-  // الصف الأول: الأيام (فوق)
-  let headerRow = document.createElement("tr");
-  headerRow.innerHTML = '<th class="time-header">الحصة</th>';
-  selectedDays.forEach(day => {
-    headerRow.innerHTML += `<th class="day-header">${day}</th>`;
-  });
-  table.appendChild(headerRow);
-
-  // باقي الصفوف: الحصص
-  for (let i = 1; i <= lessonsCount; i++) {
-    let row = document.createElement("tr");
-    row.innerHTML = `<th class="time-header">${i}</th>`;
+    <input id="username" placeholder="اسم المستخدم" style="width: 320px; display: block; margin: 20px auto; padding: 12px; border-radius: 12px;" />
+    <input id="password" type="password" placeholder="كلمة المرور" style="width: 320px; display: block; margin: 15px auto; padding: 12px; border-radius: 12px;" />
     
-    selectedDays.forEach(() => {
-      let td = document.createElement("td");
-      td.contentEditable = true;
-      td.oninput = saveCurrentTable;
-      row.appendChild(td);
-    });
-    
-    table.appendChild(row);
-  }
+    <div style="text-align: center; margin: 25px;">
+      <button onclick="login()">تسجيل دخول</button>
+      <button onclick="signup()">إنشاء حساب</button>
+    </div>
 
-  document.getElementById("welcome").textContent = name;
-  document.getElementById("tableName").value = name;
-  switchPage("tablePage");
-}
+    <p id="authMessage" style="text-align: center; font-size: 1.1rem; margin-top: 20px;"></p>
+  </div>
 
-// ----------------- نظام النجوم -----------------
-function renderStars() {
-  const container = document.getElementById("ratingStars");
-  container.innerHTML = "";
+  <!-- الصفحة الرئيسية -->
+  <div class="page" id="homePage">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px;">
+      <h2 id="welcome">دالة 📚✨</h2>
+      
+      <!-- عدد الدرازمينت + الجوهرة على اليسار -->
+      <div id="drazContainer" onclick="showAdsMenu()" style="cursor: pointer; display: flex; align-items: center; gap: 8px; background: #2c003e; padding: 10px 15px; border-radius: 12px; color: white; font-weight: bold;">
+        <span id="drazCount">0</span>
+        <span style="font-size: 1.6rem;">💜</span>
+      </div>
+    </div>
 
-  for (let i = 1; i <= 5; i++) {
-    const star = document.createElement("span");
-    star.className = "star";
-    star.innerHTML = "★";
-    star.dataset.value = i;
+    <p>نظم دراستك بكل سهولة ومتعة 😏</p>
 
-    if (i <= currentRating) {
-      star.classList.add("active");
-    }
+    <h3>جداولي المحفوظة 📋</h3>
+    <div id="savedTablesList" class="saved-tables-container"></div>
 
-    star.onclick = () => {
-      currentRating = i;
-      localStorage.setItem("dalla_rating", currentRating);
-      renderStars();
-      alert(`شكرًا! قيّمتنا ${currentRating} نجوم ⭐`);
-    };
+    <div class="main-actions">
+      <button onclick="showCustomizePage()">➕ إنشاء جدول جديد</button>
+      <button class="settings-btn" onclick="openSettings()">⚙️ الإعدادات</button>
+    </div>
+  </div>
 
-    container.appendChild(star);
-  }
-}
+  <!-- صفحة تخصيص جدول -->
+  <div class="page" id="customizePage">
+    <h2>تخصيص جدولك الجديد 🌟</h2>
+    <label>اسم الجدول:</label>
+    <input id="newTableName" placeholder="مثال: الترم الأول ١٤٤٧" />
+    <h3>الأيام اللي فيها دوام 🗓️</h3>
+    <div class="options-grid" id="daysCheckboxes"></div>
+    <h3>عدد الحصص اليومية ⏰</h3>
+    <select id="lessonsCount">
+      <option value="5">5 حصص</option>
+      <option value="6" selected>6 حصص</option>
+      <option value="7">7 حصص</option>
+      <option value="8">8 حصص</option>
+      <option value="9">9 حصص</option>
+    </select>
+    <div class="action-buttons">
+      <button onclick="backToHome()">رجوع</button>
+      <button onclick="createCustomizedTable()">إنشاء الجدول → 🚀</button>
+    </div>
+  </div>
 
-// ----------------- باقي الدوال -----------------
-function saveCurrentTable() {
-  const name = document.getElementById("tableName").value.trim() || `جدول ${tables.length + 1}`;
-  const currentTable = {
-    name,
-    user: currentUser,
-    content: document.getElementById("table").innerHTML
-  };
+  <!-- صفحة الجدول -->
+  <div class="page" id="tablePage">
+    <div class="table-header">
+      <h2 id="welcome">جدولك الدراسي 📅</h2>
+      <button onclick="backToHome()">← رجوع</button>
+    </div>
+    <input id="tableName" placeholder="اسم الجدول" />
+    <button onclick="saveCurrentTable()">💾 حفظ الجدول</button>
+    <button onclick="clearTable()">🗑️ مسح الجدول</button>
+    <table id="table"></table>
+  </div>
 
-  const idx = tables.findIndex(t => t.name === name);
-  if (idx !== -1) tables[idx] = currentTable;
-  else tables.push(currentTable);
+  <!-- صفحة الإعدادات -->
+  <div class="page" id="settingsPage">
+    <h2>الإعدادات ⚙️🔥</h2>
+    <div class="settings-section">
+      <h3>الوضع الليلي 🌙</h3>
+      <button class="dark-btn" onclick="toggleDark()">تفعيل/إيقاف الوضع الداكن</button>
+    </div>
+    <div class="settings-section">
+      <h3>تخصيص خلفية التطبيق 🎨</h3>
+      <label for="bgColor1">لون الخلفية الأساسي:</label>
+      <input type="color" id="bgColor1" value="#00d4ff" />
+      <br><br>
+      <label for="bgColor2">لون الخلفية الثاني:</label>
+      <input type="color" id="bgColor2" value="#ff4aa3" />
+      <br><br>
+      <label for="animSpeed">سرعة التدرج (ثواني):</label>
+      <input type="number" id="animSpeed" value="12" min="4" max="30" step="1" />
+      <button onclick="applyBackground()">تطبيق التغييرات 🌈</button>
+    </div>
+    <div class="action-buttons">
+      <button onclick="backToHome()">رجوع للرئيسية 🏠</button>
+    </div>
+  </div>
 
-  saveAllTables();
-  updateSavedTablesList();
-}
-
-function clearTable() {
-  if (confirm("متأكد تبي تمسح كل شيء في الجدول؟ 🧹")) {
-    document.getElementById("table").innerHTML = "";
-  }
-}
-
-function toggleDark() {
-  document.body.classList.toggle("dark");
-}
-
-function applyBackground() {
-  const c1 = document.getElementById("bgColor1").value;
-  const c2 = document.getElementById("bgColor2").value;
-  const speed = document.getElementById("animSpeed").value + "s";
-
-  document.body.style.setProperty("--bg-gradient", `linear-gradient(-45deg, ${c1}, ${c2}, #00ffa6, #ffcc00)`);
-  document.body.style.setProperty("--animation-speed", speed);
-}
-
-// بداية التطبيق
-window.onload = showHome;
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
