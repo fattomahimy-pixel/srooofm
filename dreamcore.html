@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>فقط اضغط</title>
+<style>
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #222;
+  color: white;
+}
+
+button {
+  padding: 20px 40px;
+  font-size: 28px;
+  cursor: pointer;
+  background-color: #ff5722;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  background-color: #ff784e;
+}
+
+#warning {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #ffcc00;
+}
+
+#message {
+  margin-top: 30px;
+  font-size: 24px;
+  text-align: center;
+}
+
+#counter {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #00ffcc;
+}
+</style>
+</head>
+<body>
+
+<button id="pressBtn">اضغط!</button>
+<div id="warning">تحذير: لا يمكنك ضغط الزر إلا مرة واحدة كل قرن ⏳</div>
+<div id="message"></div>
+<div id="counter"></div>
+
+<script>
+const btn = document.getElementById('pressBtn');
+const message = document.getElementById('message');
+const counterDiv = document.getElementById('counter');
+
+// تخزين العدد والضغط الشخصي في LocalStorage
+let totalClicks = localStorage.getItem('totalClicks') || 0;
+let hasClicked = localStorage.getItem('hasClicked') === 'true';
+
+counterDiv.innerText = `عدد الضاغطين: ${totalClicks}`;
+
+if(hasClicked) {
+  btn.disabled = true;
+  btn.style.backgroundColor = '#555';
+}
+
+btn.addEventListener('click', () => {
+  if(hasClicked) return;
+
+  totalClicks++;
+  localStorage.setItem('totalClicks', totalClicks);
+  hasClicked = true;
+  localStorage.setItem('hasClicked', 'true');
+
+  message.innerText = `مبروك! انت الضاغط رقم ${totalClicks} 🎉`;
+  btn.disabled = true;
+  btn.style.backgroundColor = '#555';
+
+  counterDiv.innerText = `عدد الضاغطين: ${totalClicks}`;
+});
+</script>
+
+</body>
+</html>
